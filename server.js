@@ -1,4 +1,4 @@
-const Joi = require("joi");
+// const Joi = require("joi");
 const express = require("express");
 const cors = require("cors");
 const bodyParser = require("body-parser");
@@ -24,8 +24,8 @@ app.get("/bookings", function (request, response) {
 app.get("/bookings/:id", (req, res) => {});
 
 app.post("/bookings", (req, res) => {
-  const { error } = valiDateBooking(req.body);
-  if (error) return res.status(400).send(error.details[0].message);
+  // const { error } = valiDateBooking(req.body);
+  
 
   const booking = {
     id: bookings.length + 1,
@@ -37,6 +37,7 @@ app.post("/bookings", (req, res) => {
     checkInDate: req.body.checkInDate,
     checkOutDate: req.body.checkOutDate,
   };
+  if (!booking) return res.status(400).send(error.details[0].message);
   bookings.push(booking);
   res.json(booking);
 });
@@ -58,25 +59,25 @@ app.get("/bookings/:id", (req, res) => {
   const booking = bookings.find((item) => item.id === parseInt(req.params.id));
   if (!booking)
     return res.status(404).send("The booking with the given ID not found");
-  
+
   res.json(booking);
 });
 
 // Joi validation function
-function valiDateBooking(booking) {
-  const schema = {
-    id: Joi.string().min(1).reguired(),
-    title: Joi.string().min(1).reguired(),
-    firstName: Joi.string().min(1).reguired(),
-    surname: Joi.string().min(1).reguired(),
-    email: Joi.string().min(1).reguired(),
-    roomId: Joi.string().min(1).reguired(),
-    checkInDate: Joi.string().min(1).reguired(),
-    checkOutDate: Joi.string().min(1).reguired(),
-  };
-  return Joi.validate(booking, schema);
-}
-
-const listener = app.listen(process.env.PORT, function () {
+// function valiDateBooking(booking) {
+//   const schema = {
+//     id: Joi.string().min(1).reguired(),
+//     title: Joi.string().min(1).reguired(),
+//     firstName: Joi.string().min(1).reguired(),
+//     surname: Joi.string().min(1).reguired(),
+//     email: Joi.string().min(1).reguired(),
+//     roomId: Joi.string().min(1).reguired(),
+//     checkInDate: Joi.string().min(1).reguired(),
+//     checkOutDate: Joi.string().min(1).reguired(),
+//   };
+//   return Joi.validate(booking, schema);
+// }
+const port = 4000;
+const listener = app.listen(process.env.PORT || port, function () {
   console.log("Your app is listening on port " + listener.address().port);
 });
